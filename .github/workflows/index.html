@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Island Casino - Deploy via GitHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a1f2d;
+            --secondary: #0e121b;
+            --accent: #ff5722;
+            --accent2: #ff9800;
+            --text: #ffffff;
+            --text-secondary: #a0aec0;
+            --card-bg: #252b3d;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: rgba(10, 14, 24, 0.95);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .logo h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(to right, #ff8a00, #ff2070);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+        
+        .logo h2 {
+            font-size: 1.8rem;
+            color: var(--text);
+            letter-spacing: 8px;
+            font-weight: 300;
+            margin-top: -10px;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        
+        .user-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--accent);
+        }
+        
+        .btn-login:hover {
+            background: var(--accent);
+        }
+        
+        .btn-signup {
+            background: linear-gradient(to right, var(--accent), var(--accent2));
+            color: white;
+        }
+        
+        .btn-signup:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
+        }
+        
+        .btn-github {
+            background: #333;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+        }
+        
+        .nav-item {
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            color: var(--text);
+        }
+        
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 40px 0 100px;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .section-title h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 25px;
+            background: var(--accent);
+            border-radius: 5px;
+        }
+        
+        .view-all {
+            color: var(--accent);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .game-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .game-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        }
+        
+        .game-title {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+        
+        .game-info {
+            padding: 15px;
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .play-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Deployment Guide */
+        .deployment-guide {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .deployment-guide h2 {
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .deployment-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .step-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .step-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--accent2);
+        }
+        
+        .step-card ol {
+            padding-left: 20px;
+        }
+        
+        .step-card li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .github-settings {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .github-settings h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .setting-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .setting-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--accent2);
+        }
+        
+        .setting-value {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        
+        .download-btn {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto;
+            text-align: center;
+        }
+        
+        .github-preview {
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .github-preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 2.2rem;
+            }
+            
+            .logo h2 {
+                font-size: 1.4rem;
+            }
+            
+            .main-nav {
+                flex-wrap: wrap;
+            }
+            
+            .nav-item {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .slide-up {
+            animation: slideUp 0.6s ease forwards;
+        }
+        
+        /* Page Transitions */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(10, 14, 24, 0.95);
+            padding: 30px 0 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 50;
+        }
+        
+        .footer-nav {
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .footer-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .footer-nav-item i {
+            font-size: 1.5rem;
+        }
+        
+        .footer-nav-item span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .footer-nav-item.active, .footer-nav-item:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                    <h1>DREAM</h1>
+                    <h2>ISLAND</h2>
+                </div>
+                <div class="user-actions">
+                    <button class="btn btn-login">Login</button>
+                    <button class="btn btn-signup">Sign Up</button>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <div class="nav-item active" onclick="showPage('home')">Home</div>
+                <div class="nav-item" onclick="showPage('games')">Games</div>
+                <div class="nav-item" onclick="showPage('payments')">Payments</div>
+                <div class="nav-item" onclick="showPage('deploy')">Deploy Guide</div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Pages -->
+    <main class="container">
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <div class="section-title">
+                <h2>CASINO GAMES</h2>
+                <div class="view-all" onclick="showPage('games')">
+                    <span>View All Games</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </div>
+            
+            <div class="games-grid">
+                <!-- Game 1 -->
+                <div class="game-card slide-up">
+                    <div class="game-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1615361200141-f45040f367be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');">
+                        <div class="game-title">CASH OR CRASH</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-stats">
+                            <span><i class="fas fa-users"></i> 2.4K Playing</span>
+                        </div>
+                        <button class="play-btn">Play Now</button>
+                    </div>
+                </div>
+                
+                <!-- Game 2 -->
+                <div class="game-card slide-up" style="animation-delay: 0.1s">
+                    <div class="game-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1515408320194-59643816c5b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');">
+                        <div class="game-title">DRAGON FORTUNE</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-stats">
+                            <span><i class="fas fa-users"></i> 3.1K Playing</span>
+                        </div>
+                        <button class="play-btn">Play Now</button>
+                    </div>
+                </div>
+                
+                <!-- Game 3 -->
+                <div class="game-card slide-up" style="animation-delay: 0.2s">
+                    <div class="game-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');">
+                        <div class="game-title">DICE GAME</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-stats">
+                            <span><i class="fas fa-users"></i> 3.5K Playing</span>
+                        </div>
+                        <button class="play-btn">Play Now</button>
+                    </div>
+                </div>
+                
+                <!-- Game 4 -->
+                <div class="game-card slide-up" style="animation-delay: 0.3s">
+                    <div class="game-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1617791160505-6f00504e3519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');">
+                        <div class="game-title">MINES</div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-stats">
+                            <span><i class="fas fa-users"></i> 4.2K Playing</span>
+                        </div>
+                        <button class="play-btn">Play Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Deployment Guide Page -->
+        <div class="page" id="deploy-page">
+            <div class="section-title">
+                <h2>DEPLOYMENT GUIDE</h2>
+                <div class="back-btn" onclick="showPage('home')">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </div>
+            </div>
+            
+            <div class="deployment-guide">
+                <h2>How to Deploy via GitHub Pages</h2>
+                <p>Follow these steps to deploy your casino website to GitHub Pages:</p>
+                
+                <div class="deployment-steps">
+                    <div class="step-card">
+                        <h3><i class="fas fa-1"></i> Create GitHub Repository</h3>
+                        <ol>
+                            <li>Sign in to your GitHub account</li>
+                            <li>Click the "+" icon and select "New repository"</li>
+                            <li>Name your repository (e.g., dream-island-casino)</li>
+                            <li>Set visibility to "Public" (required for free hosting)</li>
+                            <li>Initialize with a README file</li>
+                            <li>Click "Create repository"</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h3><i class="fas fa-2"></i> Upload Files</h3>
+                        <ol>
+                            <li>In your repository, click "Add file" → "Upload files"</li>
+                            <li>Drag and drop your HTML file (must be named index.html)</li>
+                            <li>Add any additional assets (images, CSS, JS)</li>
+                            <li>Commit changes with a descriptive message</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h3><i class="fas fa-3"></i> Configure GitHub Pages</h3>
+                        <ol>
+                            <li>Go to repository Settings</li>
+                            <li>In the left sidebar, click "Pages"</li>
+                            <li>Under "Source", select "Deploy from a branch"</li>
+                            <li>Set branch to "main" and folder to "/ (root)"</li>
+                            <li>Click "Save"</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h3><i class="fas fa-4"></i> Access Your Site</h3>
+                        <ol>
+                            <li>GitHub will build and deploy your site</li>
+                            <li>Wait a few minutes for deployment to complete</li>
+                            <li>Your site will be available at:<br>
+                                https://username.github.io/repository-name
+                            </li>
+                            <li>Bookmark the URL to access your casino</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="github-settings">
+                    <h3>GitHub Pages Settings</h3>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <div class="setting-label">Branch to deploy</div>
+                            <div class="setting-value">main</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">Source</div>
+                            <div class="setting-value">/(root)</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">Required file</div>
+                            <div class="setting-value">index.html</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">Custom domain</div>
+                            <div class="setting-value">Optional</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="github-preview">
+                    <h3>GitHub Pages Settings Preview</h3>
+                    <p>This is what your GitHub Pages configuration should look like:</p>
+                    <img src="https://docs.github.com/assets/cb-138303/images/help/pages/select-publishing-source.png" alt="GitHub Pages Settings">
+                </div>
+                
+                <div class="download-btn">
+                    <button class="btn btn-signup" onclick="downloadSite()">
+                        <i class="fas fa-download"></i> Download Complete Website
+                    </button>
+                    <button class="btn btn-github" onclick="openGithub()">
+                        <i class="fab fa-github"></i> Create GitHub Repository
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-nav">
+                <div class="footer-nav-item active" onclick="showPage('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <div class="footer-nav-item" onclick="showPage('games')">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Games</span>
+                </div>
+                <div class="footer-nav-item" onclick="showPage('payments')">
+                    <i class="fas fa-wallet"></i>
+                    <span>Payments</span>
+                </div>
+                <div class="footer-nav-item" onclick="showPage('deploy')">
+                    <i class="fas fa-rocket"></i>
+                    <span>Deploy</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show requested page
+            document.getElementById(`${pageId}-page`).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Update footer navigation
+            document.querySelectorAll('.footer-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Activate corresponding nav item
+            const navIndex = Array.from(document.querySelectorAll('.nav-item')).findIndex(
+                item => item.getAttribute('onclick') === `showPage('${pageId}')`
+            );
+            
+            if (navIndex !== -1) {
+                document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+            }
+            
+            // Activate corresponding footer item
+            const footerIndex = Array.from(document.querySelectorAll('.footer-nav-item')).findIndex(
+                item => item.getAttribute('onclick') === `showPage('${pageId}')`
+            );
+            
+            if (footerIndex !== -1) {
+                document.querySelectorAll('.footer-nav-item')[footerIndex].classList.add('active');
+            }
+        }
+        
+        // Download site functionality
+        function downloadSite() {
+            // Create a Blob with the HTML content
+            const htmlContent = `<!DOCTYPE html>${document.documentElement.outerHTML}`;
+            const blob = new Blob([htmlContent], {type: 'text/html'});
+            
+            // Create download link
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'dream-island-casino.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            alert('Website downloaded! Upload this file to GitHub as index.html');
+        }
+        
+        // Open GitHub
+        function openGithub() {
+            window.open('https://github.com/new', '_blank');
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set home page as active
+            showPage('home');
+        });
+    </script>
+</body>
+</html>
